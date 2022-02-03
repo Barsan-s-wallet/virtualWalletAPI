@@ -1,2 +1,2 @@
 # virtualWalletAPI
-only virtual wallet
+only a virtual wallet
