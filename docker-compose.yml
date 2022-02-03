@@ -1,0 +1,23 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo:4
+    ports:
+      - 27017:27017
+  wallet:
+    build:
+      context: ./
+    command: npm run dev
+    ports:
+      - 5000:5000
+    environment:
+      MONGO_URL: mongodb
+      PORT: 5000
+    volumes:
+      - ./:/src/
+    restart: always
+    env_file: ./.env
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
