@@ -21,9 +21,8 @@ const users = new Users();
 app.get("/", (req, res) => res.json({ message: "Virtual Wallet" }));
 
 app.post("/users", async (req, res) => {
-  const { name, email, cpf, tel } = req.body;
   try {
-    const resp = await users.createUser(name, email, cpf, tel);
+    const resp = await users.createUser(req.body);
     return res.status(201).send(resp);
   } catch (err: any) {
     res.status(500).json({ message: "Deu ruim" });

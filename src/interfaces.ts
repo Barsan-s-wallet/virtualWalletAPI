@@ -1,6 +1,7 @@
 export interface IUsers {
-  name?: string;
-  email?: string;
-  cpf?: string;
+  name: string;
+  email: string;
+  password: string;
+  cpf: string;
   tel?: string;
 }
