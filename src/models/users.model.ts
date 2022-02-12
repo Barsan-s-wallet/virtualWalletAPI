@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import db from "../db";
 import { hashPassword } from "../helpers/hashPassword";
-import { IUsers } from "../interfaces";
+import { IUsers, IQueryUsers } from "../interfaces";
 const cursor = db.db();
 
 class Users {
@@ -15,6 +15,7 @@ class Users {
 
     try {
       user.password = hashPassword(user.password);
+      user.isLogged = false;
       const resp = await cursor.collection("users").insertOne(user);
       return resp.ops[0];
     } catch (error: any) {
@@ -39,6 +40,38 @@ class Users {
         .collection("users")
         .findOne({ _id: ObjectId(_userId) });
       return user;
+    } catch (error: any) {
+      console.error(error);
+      throw new Error(error.message);
+    }
+  }
+
+  async filterUser(query: IQueryUsers) {
+    try {
+      const user = await cursor.collection("users").find(query).toArray();
+      return user;
+    } catch (error: any) {
+      console.error(error);
+      throw new Error(error.message);
+    }
+  }
+
+  async updateUser(userId: string, body: IQueryUsers) {
+    try {
+      const user = await cursor
+        .collection("users")
+        .findOneAndUpdate({ _id: ObjectId(userId) }, { $set: body });
+      return user;
+    } catch (error: any) {
+      console.error(error);
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteUser(userId: string) {
+    try {
+      await cursor.collection("users").deleteOne({ _id: ObjectId(userId) });
+      return "Deleted user";
     } catch (error: any) {
       console.error(error);
       throw new Error(error.message);
