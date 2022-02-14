@@ -58,10 +58,9 @@ class Users {
 
   async updateUser(userId: string, body: IQueryUsers) {
     try {
-      const user = await cursor
+      return await cursor
         .collection("users")
         .findOneAndUpdate({ _id: ObjectId(userId) }, { $set: body });
-      return user;
     } catch (error: any) {
       console.error(error);
       throw new Error(error.message);

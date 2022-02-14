@@ -4,38 +4,32 @@ import helmet from "helmet";
 import cors from "cors";
 import { config } from "dotenv";
 import { join } from "path";
-import Users from "./models/users.model";
+import {
+  allUsers,
+  createUser,
+  editUser,
+  login,
+  viewUser,
+} from "./controllers/users.controlers";
 
 config({ path: join(__dirname, "../.env") });
 
 const PORT = process.env.PORT;
 const app = express();
+
 app.use(cors());
-app.use(morgan("combined"));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(helmet());
+app.use(morgan("combined"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.disable("x-powered-by");
-const users = new Users();
 
+// ROUTES
 app.get("/", (req, res) => res.json({ message: "Virtual Wallet" }));
-
-app.post("/users", async (req, res) => {
-  try {
-    const resp = await users.createUser(req.body);
-    return res.status(201).send(resp);
-  } catch (err: any) {
-    res.status(500).json({ message: "Deu ruim" });
-  }
-});
-
-app.get("/users", async (req, res) => {
-  try {
-    const resp = await users.allUsers();
-    return res.status(200).send(resp);
-  } catch (error) {
-    res.status(500).json({ message: "Deu ruim" });
-  }
-});
+app.post("/users", createUser);
+app.patch("/users/:id", editUser);
+app.post("/login", login);
+app.get("/users/:id", viewUser);
+app.get("/users", allUsers)
 
 app.listen(PORT, () => console.log(`Running on <http://localhost:${PORT}>`));

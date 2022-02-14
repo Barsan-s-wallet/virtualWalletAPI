@@ -13,4 +13,5 @@ export interface IQueryUsers {
   password?: string;
   cpf?: string;
   tel?: string;
+  isLogged?: boolean;
 }

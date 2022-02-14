@@ -17,6 +17,43 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 
+export const editUser = async (req: Request, res: Response) => {
+  try {
+    const updatedUser = await users.updateUser(req.params.id, req.body);
+    console.log(updatedUser);
+    delete updatedUser.value.password;
+    delete updatedUser.value._id;
+    return res.status(200).send(updatedUser.value);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const viewUser = async (req: Request, res: Response) => {
+  try {
+    const user = await users.findUser(req.params.id);
+    delete user.password;
+    return res.status(200).send(user);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const allUsers = async (req: Request, res: Response) => {
+  try {
+    const resp = await users.filterUser({});
+
+    return res.status(200).send(
+      resp.map((user) => {
+        delete user.password;
+        return user;
+      })
+    );
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 export const login = async (req: Request, res: Response) => {
   try {
     const auth = await users.filterUser({
@@ -24,14 +61,15 @@ export const login = async (req: Request, res: Response) => {
       password: hashPassword(req.body.password),
     });
 
-    if (length > 0) {
+    if (auth.length > 0) {
       const token = jwt.sign({ id: auth[0]._id }, SECRET, {
-        algorithm: "RS256",
+        expiresIn: 300, // expires /s
       });
-      return res.status(200).send(token);
+      await users.updateUser(auth[0]._id, { isLogged: true });
+      return res.status(200).send({ token: token });
     }
 
-    return res.status(400).json({ message: "Campos inválidos" });
+    return res.status(400).json({ message: "Úsuario ou senha inválidos" });
   } catch (error: any) {
     res.status(500).json(error);
   }
