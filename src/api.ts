@@ -11,6 +11,7 @@ import {
   login,
   viewUser,
 } from "./controllers/users.controlers";
+import { tokenVerify } from "./middlewares/jwtVerify.middle";
 
 config({ path: join(__dirname, "../.env") });
 
@@ -27,9 +28,9 @@ app.disable("x-powered-by");
 // ROUTES
 app.get("/", (req, res) => res.json({ message: "Virtual Wallet" }));
 app.post("/users", createUser);
-app.patch("/users/:id", editUser);
+app.patch("/users/:id", tokenVerify, editUser);
 app.post("/login", login);
-app.get("/users/:id", viewUser);
-app.get("/users", allUsers)
+app.get("/users/:id", tokenVerify, viewUser);
+app.get("/users", tokenVerify, allUsers);
 
 app.listen(PORT, () => console.log(`Running on <http://localhost:${PORT}>`));

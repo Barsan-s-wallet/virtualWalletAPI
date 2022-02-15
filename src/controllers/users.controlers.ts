@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 import { config } from "dotenv";
 import { join } from "path";
 config({ path: join(__dirname, "../.env") });
-const users = new Users();
 const SECRET = process.env.SECRET!;
+const users = new Users();
 
 export const createUser = async (req: Request, res: Response) => {
   try {

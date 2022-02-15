@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export interface IUsers {
   name: string;
   email: string;
@@ -8,6 +10,7 @@ export interface IUsers {
 }
 
 export interface IQueryUsers {
+  _id?: ObjectId;
   name?: string;
   email?: string;
   password?: string;
