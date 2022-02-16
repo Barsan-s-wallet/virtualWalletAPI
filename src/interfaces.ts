@@ -18,3 +18,8 @@ export interface IQueryUsers {
   tel?: string;
   isLogged?: boolean;
 }
+
+export interface IQueryWallets {
+  balance?: number;
+  walletName?: string;
+}
