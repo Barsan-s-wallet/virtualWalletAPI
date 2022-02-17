@@ -19,6 +19,13 @@ export interface IQueryUsers {
   isLogged?: boolean;
 }
 
+export interface IWallets {
+  balance?: number;
+  walletName: string;
+  userId: ObjectId;
+  bankServiceId: string;
+}
+
 export interface IQueryWallets {
   balance?: number;
   walletName?: string;

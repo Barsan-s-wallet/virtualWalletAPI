@@ -1,14 +1,14 @@
 import { ObjectId } from "mongodb";
 import db from "../db";
-import { IQueryWallets } from "../interfaces";
+import { IQueryWallets, IWallets } from "../interfaces";
 const cursor = db.db();
 
 class Wallets {
   constructor() {}
-  async createWallet(idUser: string, walletName: string) {
+  async createWallet({userId, walletName}: IWallets) {
     try {
       const resp = await cursor.collection("wallets").insertOne({
-        userId: ObjectId(idUser),
+        userId: ObjectId(userId),
         balance: 0.0,
         walletName: walletName,
       });
