@@ -1,7 +1,8 @@
 import { config } from "dotenv";
 import { join } from "path";
 
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { IClient } from "../interfaces";
 
 config({ path: join(__dirname, "../.env") });
 
@@ -13,11 +14,6 @@ const headers = {
   access_token: asaasApiKey,
 };
 
-interface IClient {
-  name: string;
-  cpfCnpj: string;
-}
-
 export const createClientAsaas = async (client: IClient) => {
   const req = {
     headers: headers,
@@ -26,12 +22,12 @@ export const createClientAsaas = async (client: IClient) => {
 
   try {
     const resp = await axios.post(`${asaasBaseUrl}/customers`, req);
-    return resp;
+    return resp.data;
   } catch (error: any) {
     console.error(error);
     throw new Error(error);
   }
-};  
+};
 
 type billingType = "BOLETO" | "PIX" | "CREDIT_CARD" | "UNDEFINED";
 
@@ -59,7 +55,7 @@ export const createLevyAsaas = async (
   };
   try {
     const resp = await axios.post(asaasBaseUrl + "/payments", req);
-    return resp;
+    return resp.data;
   } catch (error: any) {
     console.error(error);
     throw new Error(error);

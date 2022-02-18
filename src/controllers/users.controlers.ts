@@ -4,6 +4,7 @@ import { hashPassword } from "../helpers/hashPassword";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
 import { join } from "path";
+import { createWalletService } from "../services/createWallet.service";
 config({ path: join(__dirname, "../.env") });
 const SECRET = process.env.SECRET!;
 const users = new Users();
@@ -11,6 +12,10 @@ const users = new Users();
 export const createUser = async (req: Request, res: Response) => {
   try {
     const resp = await users.createUser(req.body);
+    await createWalletService(
+      { cpfCnpj: resp.cpf, name: resp.name },
+      { userId: resp._id, walletName: "default" }
+    );  
     return res.status(201).send(resp);
   } catch (error: any) {
     res.status(500).json(error);
