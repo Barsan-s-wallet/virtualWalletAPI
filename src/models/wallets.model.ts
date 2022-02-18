@@ -5,7 +5,7 @@ const cursor = db.db();
 
 class Wallets {
   constructor() {}
-  async createWallet({userId, walletName}: IWallets) {
+  async createWallet({ userId, walletName }: IWallets) {
     try {
       const resp = await cursor.collection("wallets").insertOne({
         userId: ObjectId(userId),
@@ -45,7 +45,11 @@ class Wallets {
     try {
       return await cursor
         .collection("wallets")
-        .findOneAndUpdate({ userId: ObjectId(userId) }, { $set: body });
+        .findOneAndUpdate(
+          { userId: ObjectId(userId) },
+          { $set: body },
+          { upsert: true }
+        );
     } catch (error: any) {
       console.error(error);
       throw new Error(error.message);
