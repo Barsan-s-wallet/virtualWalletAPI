@@ -8,7 +8,16 @@ export const createWallet = async (req: Request, res: Response) => {
     const wallet = await wallets.createWallet(req.body);
     return res.status(201).send(wallet);
   } catch (error: any) {
-    console.error(error);
-    throw new Error(error);
+    res.status(500).send(error);
   }
 };
+
+export const deleteWallet = async (req: Request, res: Response) => {
+  try {
+    const resp = await wallets.deleteWallet(req.params.id, req.body.walletName)
+    return res.status(200).send(resp)
+  } catch (error: any) {
+    res.status(500).send(error);
+  }
+};
+
