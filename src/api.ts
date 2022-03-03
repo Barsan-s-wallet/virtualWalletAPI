@@ -12,6 +12,7 @@ import {
   viewUser,
 } from "./controllers/users.controlers";
 import { tokenVerify } from "./middlewares/jwtVerify.middle";
+import { createWallet, deleteWallet } from "./controllers/wallets.controllers";
 
 config({ path: join(__dirname, "../.env") });
 
@@ -25,12 +26,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.disable("x-powered-by");
 
-// ROUTES
+// USERS ROUTES
 app.get("/", (req, res) => res.json({ message: "Virtual Wallet" }));
 app.post("/users", createUser);
 app.patch("/users/:id", tokenVerify, editUser);
 app.post("/login", login);
 app.get("/users/:id", tokenVerify, viewUser);
 app.get("/users", tokenVerify, allUsers);
+
+//  WALLETS
+app.post("/wallet", createWallet);
+app.delete("/wallet", deleteWallet);
 
 app.listen(PORT, () => console.log(`Running on <http://localhost:${PORT}>`));

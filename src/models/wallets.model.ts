@@ -56,7 +56,7 @@ class Wallets {
     }
   }
 
-  async deleteUser(userId: string, walletName: string) {
+  async deleteWallet(userId: string, walletName: string) {
     try {
       await cursor
         .collection("wallets")
